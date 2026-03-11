@@ -2,6 +2,25 @@
 
 This is an experiment to have the LLM do its own research.
 
+---
+
+## Research Agent mode (mục tiêu do người dùng nhập)
+
+Khi user muốn research theo **mục tiêu** (giả thuyết / paper / bảng so sánh + draft paper):
+
+1. **Đầu vào:** User điền `research_brief.md` (mục tiêu, time budget, success criteria, gợi ý đọc thêm). Spec đầy đủ: `specs/research-agent-spec.md`.
+2. **Workflow:** Dùng các Cursor skills trong `.cursor/skills/`:
+   - **research-setup:** Đọc repo + research_brief → tạo `research_plan.md` (mục tiêu, danh sách thí nghiệm).
+   - **research-experiment:** Chọn thí nghiệm → sửa code (có thể nhiều file) → chạy `uv run train.py` → ghi results.tsv + cập nhật plan → keep/discard. Lặp.
+   - **research-synthesis:** Khi đủ thí nghiệm → tổng hợp **bảng so sánh** → viết/cập nhật `draft/paper.md`.
+   - **research-read-external:** Khi cần, đọc URL/papers để cải thiện ý tưởng.
+3. **Artifacts:** research_plan.md, results.tsv, bảng so sánh (trong plan hoặc draft/), draft/paper.md.
+4. **Bắt đầu:** User có thể nói "đọc research_brief và bắt đầu research" → agent dùng research-setup rồi vào vòng research-experiment.
+
+Phần dưới đây mô tả **chế độ autoresearch gốc** (tối ưu val_bpb, chỉ sửa train.py, không bắt buộc draft paper).
+
+---
+
 ## Setup
 
 To set up a new experiment, work with the user to:
